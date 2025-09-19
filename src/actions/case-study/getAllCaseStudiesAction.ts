@@ -5,8 +5,8 @@ import { unstable_cache } from "next/cache";
 async function getAllCaseStudiesUncached(): Promise<CaseStudyCardDocument[]> {
   try {
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
 
     const caseStudies = await collection
       .find({})

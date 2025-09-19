@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "scalesolutions.s3.eu-north-1.amazonaws.com",
+        hostname: "res.cloudinary.com",
       },
       {
         protocol: "https",

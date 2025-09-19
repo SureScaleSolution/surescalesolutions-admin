@@ -4,8 +4,8 @@ import { Stats } from "@/types/stats";
 export default async function getStatsAction(): Promise<Stats> {
   try {
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
     const stats = await collection.countDocuments();
     return { totalCaseStudies: stats };
   } catch (error) {

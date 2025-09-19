@@ -7,8 +7,8 @@ export default async function getCaseStudyByIdAction(
 ): Promise<CaseStudyDocument | null> {
   try {
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
 
     const caseStudy = await collection.findOne({ _id: new ObjectId(id) });
 

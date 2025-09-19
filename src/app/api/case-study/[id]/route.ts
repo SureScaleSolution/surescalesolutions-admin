@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { CaseStudyDocument } from "@/types/caseStudy";
-import { uploadToS3, deleteFromS3 } from "@/lib/s3";
+import { uploadToS3, deleteFromS3 } from "@/lib/cloudinary";
 import { ObjectId } from "mongodb";
 import { validateCaseStudyData } from "@/lib/validation";
 import { verifyToken } from "@/lib/jwt";
@@ -78,8 +78,8 @@ export async function PUT(
 
     // Get existing case study
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
 
     const existingCaseStudy = (await collection.findOne({
       _id: new ObjectId(id),
@@ -141,8 +141,7 @@ export async function PUT(
       const thumbnailBuffer = Buffer.from(await thumbnailImage.arrayBuffer());
       thumbnailImageUrl = await uploadToS3(
         thumbnailBuffer,
-        thumbnailImage.name,
-        thumbnailImage.type
+        thumbnailImage.name
       );
     }
     updateDoc.thumbnailImageUrl = thumbnailImageUrl;
@@ -178,8 +177,7 @@ export async function PUT(
         const challengeBuffer = Buffer.from(await challengeImage.arrayBuffer());
         challengeImageUrl = await uploadToS3(
           challengeBuffer,
-          challengeImage.name,
-          challengeImage.type
+          challengeImage.name
         );
       }
 
@@ -226,8 +224,7 @@ export async function PUT(
         const resultBuffer = Buffer.from(await resultImage.arrayBuffer());
         resultImageUrl = await uploadToS3(
           resultBuffer,
-          resultImage.name,
-          resultImage.type
+          resultImage.name
         );
       }
 
@@ -298,8 +295,8 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
 
     // Check if case study exists and get the document to extract image URLs
     const existingCaseStudy = (await collection.findOne({

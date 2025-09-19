@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { CaseStudyDocument } from "@/types/caseStudy";
-import { uploadToS3 } from "@/lib/s3";
+import { uploadToS3 } from "@/lib/cloudinary";
 import { validateCaseStudyData } from "@/lib/validation";
 import { verifyToken } from "@/lib/jwt";
 import { AUTH_CONSTANTS } from "@/constants/auth";
@@ -83,12 +83,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upload thumbnail image to S3
+    // Upload thumbnail image to Cloudinary
     const thumbnailBuffer = Buffer.from(await thumbnailImage.arrayBuffer());
     const thumbnailImageUrl = await uploadToS3(
       thumbnailBuffer,
-      thumbnailImage.name,
-      thumbnailImage.type
+      thumbnailImage.name
     );
 
     // Handle challenges
@@ -107,8 +106,7 @@ export async function POST(request: NextRequest) {
         const challengeBuffer = Buffer.from(await challengeImage.arrayBuffer());
         const challengeImageUrl = await uploadToS3(
           challengeBuffer,
-          challengeImage.name,
-          challengeImage.type
+          challengeImage.name
         );
         challenges.challengeImageUrl = challengeImageUrl;
       }
@@ -137,8 +135,7 @@ export async function POST(request: NextRequest) {
         const resultBuffer = Buffer.from(await resultImage.arrayBuffer());
         const resultImageUrl = await uploadToS3(
           resultBuffer,
-          resultImage.name,
-          resultImage.type
+          resultImage.name
         );
         result.resultImageUrl = resultImageUrl;
       }
@@ -169,8 +166,8 @@ export async function POST(request: NextRequest) {
 
     // Save to MongoDB
     const client = await clientPromise;
-    const db = client.db("scalesolutions");
-    const collection = db.collection("caseStudies");
+    const db = client.db("surescalesolutions");
+    const collection = db.collection("case-studies");
 
     const insertResult = await collection.insertOne(caseStudyDoc);
 
