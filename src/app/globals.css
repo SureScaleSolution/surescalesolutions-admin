@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@theme {
+  --breakpoint-xs: 25rem;
+
+  --color-primary: #2A3FCC;
+  --color-secondary: #1E1363;
+  --color-darkGray: #999999;
+  --color-lightGray: #484848;
+  --color-background: #E6EDFF;
+
+  --shadow-light: 2px 2px 200px rgba(0, 0, 0, 0.10);
+  --shadow-dark: 4px 4px 200px rgba(0, 0, 0, 0.10);
+  --shadow-carousel: 0px 0px 15px rgba(0, 0, 0, 0.15);
+}
