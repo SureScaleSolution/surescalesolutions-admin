@@ -79,21 +79,4 @@ export const deleteFromCloudinary = async (imageUrl: string): Promise<boolean> =
   }
 };
 
-// Delete multiple images from Cloudinary
-export const deleteMultipleFromCloudinary = async (imageUrls: string[]): Promise<{ success: number; failed: number }> => {
-  const results = await Promise.allSettled(
-    imageUrls.map(url => deleteFromCloudinary(url))
-  );
-
-  const success = results.filter(result => result.status === 'fulfilled' && result.value === true).length;
-  const failed = results.length - success;
-
-  return { success, failed };
-};
-
-// Legacy exports for backward compatibility (will be updated in API routes)
-export const uploadToS3 = uploadToCloudinary;
-export const deleteFromS3 = deleteFromCloudinary;
-export const deleteMultipleFromS3 = deleteMultipleFromCloudinary;
-
 export default cloudinary;

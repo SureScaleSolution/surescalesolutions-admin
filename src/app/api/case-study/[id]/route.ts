@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { CaseStudyDocument } from "@/types/caseStudy";
-import { uploadToS3, deleteFromS3 } from "@/lib/cloudinary";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/cloudinary";
 import { ObjectId } from "mongodb";
 import { validateCaseStudyData } from "@/lib/validation";
 import { verifyToken } from "@/lib/jwt";
@@ -131,7 +131,7 @@ export async function PUT(
       // Delete old thumbnail image from S3
       if (existingCaseStudy.thumbnailImageUrl) {
         try {
-          await deleteFromS3(existingCaseStudy.thumbnailImageUrl);
+          await deleteFromCloudinary(existingCaseStudy.thumbnailImageUrl);
         } catch (error) {
           console.warn("Failed to delete old thumbnail image from S3:", error);
         }
@@ -139,7 +139,7 @@ export async function PUT(
 
       // Upload new thumbnail image
       const thumbnailBuffer = Buffer.from(await thumbnailImage.arrayBuffer());
-      thumbnailImageUrl = await uploadToS3(
+      thumbnailImageUrl = await uploadToCloudinary(
         thumbnailBuffer,
         thumbnailImage.name
       );
@@ -164,7 +164,7 @@ export async function PUT(
         // Delete old challenge image if it exists
         if (existingCaseStudy.challenges?.challengeImageUrl) {
           try {
-            await deleteFromS3(existingCaseStudy.challenges.challengeImageUrl);
+            await deleteFromCloudinary(existingCaseStudy.challenges.challengeImageUrl);
           } catch (error) {
             console.warn(
               "Failed to delete old challenge image from S3:",
@@ -175,7 +175,7 @@ export async function PUT(
 
         // Upload new challenge image
         const challengeBuffer = Buffer.from(await challengeImage.arrayBuffer());
-        challengeImageUrl = await uploadToS3(
+        challengeImageUrl = await uploadToCloudinary(
           challengeBuffer,
           challengeImage.name
         );
@@ -214,7 +214,7 @@ export async function PUT(
         // Delete old result image if it exists
         if (existingCaseStudy.result?.resultImageUrl) {
           try {
-            await deleteFromS3(existingCaseStudy.result.resultImageUrl);
+            await deleteFromCloudinary(existingCaseStudy.result.resultImageUrl);
           } catch (error) {
             console.warn("Failed to delete old result image from S3:", error);
           }
@@ -222,7 +222,7 @@ export async function PUT(
 
         // Upload new result image
         const resultBuffer = Buffer.from(await resultImage.arrayBuffer());
-        resultImageUrl = await uploadToS3(
+        resultImageUrl = await uploadToCloudinary(
           resultBuffer,
           resultImage.name
         );
@@ -343,7 +343,7 @@ export async function DELETE(
         await Promise.all(
           imageUrls.map(async (url) => {
             try {
-              await deleteFromS3(url);
+              await deleteFromCloudinary(url);
             } catch (error) {
               console.warn(`Failed to delete image ${url} from S3:`, error);
             }

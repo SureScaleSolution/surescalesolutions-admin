@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { CaseStudyDocument } from "@/types/caseStudy";
-import { uploadToS3 } from "@/lib/cloudinary";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { validateCaseStudyData } from "@/lib/validation";
 import { verifyToken } from "@/lib/jwt";
 import { AUTH_CONSTANTS } from "@/constants/auth";
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 
     // Upload thumbnail image to Cloudinary
     const thumbnailBuffer = Buffer.from(await thumbnailImage.arrayBuffer());
-    const thumbnailImageUrl = await uploadToS3(
+    const thumbnailImageUrl = await uploadToCloudinary(
       thumbnailBuffer,
       thumbnailImage.name
     );
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
 
       if (challengeImage && challengeImage.size > 0) {
         const challengeBuffer = Buffer.from(await challengeImage.arrayBuffer());
-        const challengeImageUrl = await uploadToS3(
+        const challengeImageUrl = await uploadToCloudinary(
           challengeBuffer,
           challengeImage.name
         );
@@ -133,10 +133,7 @@ export async function POST(request: NextRequest) {
 
       if (resultImage && resultImage.size > 0) {
         const resultBuffer = Buffer.from(await resultImage.arrayBuffer());
-        const resultImageUrl = await uploadToS3(
-          resultBuffer,
-          resultImage.name
-        );
+        const resultImageUrl = await uploadToCloudinary(resultBuffer, resultImage.name);
         result.resultImageUrl = resultImageUrl;
       }
     }
